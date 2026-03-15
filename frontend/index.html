@@ -1,79 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Solar | Midnight Drop Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; overflow-x: hidden; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-<title>Midnight Hoodie Drop</title>
-
-<link rel="stylesheet" href="style.css">
-
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(250, 204, 21, 0.5); }
+    </style>
 </head>
+<body class="bg-slate-50 text-slate-900">
 
-<body>
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-80 bg-white z-[200] shadow-2xl translate-x-full transition-transform p-8 border-l">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="font-black text-xl">Your Bag</h2>
+            <button onclick="toggleCart()" class="text-slate-400 hover:text-black">✕</button>
+        </div>
+        <div id="cart-items" class="space-y-4 mb-8"></div>
+    </div>
 
-<div class="app">
+    <div id="phase-login" class="fixed inset-0 z-[100] flex items-center justify-center bg-yellow-400">
+        <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md mx-4 text-center fade-in">
+            <div class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <i class="fas fa-bolt text-white text-2xl"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold mb-2">Access Portal</h2>
+            <p class="text-slate-500 mb-8">Identification required for Midnight Drop access.</p>
+            <input type="email" id="user-email" placeholder="Email Address" class="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-yellow-400 outline-none mb-4 transition-all">
+            <button onclick="goToSelection()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold hover:bg-black transition-all shadow-lg">Enter Lobby</button>
+        </div>
+    </div>
 
-<header class="header">
+    <div id="phase-selection" class="hidden min-h-screen p-8 fade-in">
+        <div class="max-w-4xl mx-auto text-center mb-12">
+            <h1 class="text-4xl font-black mb-4">Choose Your Target</h1>
+            <p class="text-slate-500 font-medium">Select the item you wish to claim when the drop goes live.</p>
+        </div>
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div onclick="selectProduct('Midnight Hoodie', '🧥', 2499)" class="product-card bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-yellow-400 cursor-pointer transition-all">
+        <div class="h-48 bg-slate-50 rounded-2xl flex items-center justify-center text-6xl mb-4">🧥</div>
+        <h3 class="font-bold text-xl">Midnight Hoodie</h3>
+        <p class="text-yellow-600 font-black">₹2,499</p>
+    </div>
+    <div onclick="selectProduct('Solar Tech Joggers', '👖', 1999)" class="product-card bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-yellow-400 cursor-pointer transition-all">
+        <div class="h-48 bg-slate-50 rounded-2xl flex items-center justify-center text-6xl mb-4">👖</div>
+        <h3 class="font-bold text-xl">Tech Joggers</h3>
+        <p class="text-yellow-600 font-black">₹1,999</p>
+    </div>
+    <div onclick="selectProduct('Atomic Cap', '🧢', 899)" class="product-card bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-yellow-400 cursor-pointer transition-all">
+        <div class="h-48 bg-slate-50 rounded-2xl flex items-center justify-center text-6xl mb-4">🧢</div>
+        <h3 class="font-bold text-xl">Atomic Cap</h3>
+        <p class="text-yellow-600 font-black">₹899</p>
+    </div>
 
-<p class="drop-label">MIDNIGHT DROP</p>
-
-<h1 class="title">HOODIE COLLECTION</h1>
-
-<div class="countdown">
-Drop opens in <span id="timer">00:00:00</span>
+    <div onclick="selectProduct('Orbit Sunglasses', '🕶️', 1299)" class="product-card bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-yellow-400 cursor-pointer transition-all">
+        <div class="h-48 bg-slate-50 rounded-2xl flex items-center justify-center text-6xl mb-4">🕶️</div>
+        <h3 class="font-bold text-xl">Orbit Sunglasses</h3>
+        <p class="text-yellow-600 font-black">₹1,299</p>
+    </div>
+    <div onclick="selectProduct('Solar Sling Bag', '🎒', 1599)" class="product-card bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-yellow-400 cursor-pointer transition-all">
+        <div class="h-48 bg-slate-50 rounded-2xl flex items-center justify-center text-6xl mb-4">🎒</div>
+        <h3 class="font-bold text-xl">Solar Sling Bag</h3>
+        <p class="text-yellow-600 font-black">₹1,599</p>
+    </div>
+    <div onclick="selectProduct('Ozone Windbreaker', '🧥', 3299)" class="product-card bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-yellow-400 cursor-pointer transition-all">
+        <div class="h-48 bg-slate-50 rounded-2xl flex items-center justify-center text-6xl mb-4">🧥</div>
+        <h3 class="font-bold text-xl">Ozone Windbreaker</h3>
+        <p class="text-yellow-600 font-black">₹3,299</p>
+    </div>
 </div>
+        </div>
+    </div>
 
-</header>
+    <div id="phase-drop" class="hidden fade-in">
+        <nav class="bg-white border-b p-6 flex justify-between items-center sticky top-0 z-50">
+            <div>
+                <h1 class="font-extrabold text-2xl tracking-tighter uppercase"><span id="user-display" class="text-yellow-500"></span></h1>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Concurrency Control Active</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="relative p-3 bg-slate-100 rounded-full hover:bg-yellow-200 transition-all">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-slate-900 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <div id="status-light" class="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-bold text-green-700 uppercase">Gateway Active</span>
+                </div>
+            </div>
+        </nav>
 
+        <div class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 sticky top-28">
+                    <div id="drop-icon" class="w-full h-64 bg-slate-50 rounded-3xl flex items-center justify-center text-7xl mb-6"></div>
+                    <h2 id="drop-name" class="text-2xl font-black mb-2"></h2>
+                    <p class="text-slate-500 text-sm mb-6">Securing this item requires atomic confirmation.</p>
+                    
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase">Stock Left</p>
+                            <p id="main-stock-display" class="text-4xl font-black text-slate-900">10</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-400 uppercase">Price</p>
+                            <p id="drop-price" class="text-2xl font-black text-yellow-500"></p>
+                        </div>
+                    </div>
 
-<section class="product-card">
+                    <button onclick="attemptPurchase()" id="buy-btn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-lg hover:bg-black transition-all active:scale-95">
+                        CLAIM PRIZE
+                    </button>
+                    <button onclick="location.reload()" class="w-full mt-4 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-600">Cancel / Switch</button>
+                </div>
+            </div>
 
-<div class="image-container">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-yellow-400 p-6 rounded-[2rem] shadow-lg">
+                    <h3 class="font-bold text-slate-900 mb-2">Stress Test Simulator</h3>
+                    <p class="text-sm text-slate-800 mb-4 font-medium">Trigger 50 concurrent bots to attempt to steal the remaining stock.</p>
+                    <button onclick="simulateFlashSale()" class="bg-white px-6 py-3 rounded-xl font-bold text-sm shadow-md hover:shadow-xl transition-all">RUN CONCURRENCY TEST</button>
+                </div>
 
-<img 
-src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=400"
-class="product-img">
+                <div class="bg-slate-900 rounded-[2rem] p-8 text-white min-h-[400px]">
+                    <h3 class="font-bold text-xs uppercase tracking-widest text-slate-500 mb-6">Atomic Transaction Log</h3>
+                    <div id="transaction-log" class="space-y-2 font-mono text-xs overflow-y-auto max-h-[350px]">
+                        <div class="text-green-400 opacity-50 underline">[SYSTEM] Waiting for user action...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div id="soldOutOverlay" class="sold-out">
-SOLD OUT
-</div>
+    <script>
+        const SERVER_STATE = { stock: 10, isLocked: false, currentUser: "" };
+        let cart = [];
 
-<div class="price-tag">
-₹2499
-</div>
+        function toggleCart() {
+            document.getElementById('cart-drawer').classList.toggle('translate-x-full');
+        }
 
-</div>
+        function goToSelection() {
+            const email = document.getElementById('user-email').value;
+            if(!email.includes('@')) return alert("Enter a valid email");
+            SERVER_STATE.currentUser = email;
+            document.getElementById('phase-login').classList.add('hidden');
+            document.getElementById('phase-selection').classList.remove('hidden');
+        }
 
+        function selectProduct(name, icon, price) {
+            document.getElementById('phase-selection').classList.add('hidden');
+            document.getElementById('phase-drop').classList.remove('hidden');
+            document.getElementById('user-display').innerText = SERVER_STATE.currentUser.split('@')[0];
+            document.getElementById('drop-name').innerText = name;
+            document.getElementById('drop-icon').innerText = icon;
+            document.getElementById('drop-price').innerText = "₹" + price.toLocaleString();
+        }
 
-<div class="product-info">
+        async function atomicPurchaseGateway(id) {
+            if (SERVER_STATE.stock <= 0) return { success: false, message: "SOLD OUT" };
+            while (SERVER_STATE.isLocked) { await new Promise(r => setTimeout(r, 10)); }
+            SERVER_STATE.isLocked = true; 
+            if (SERVER_STATE.stock > 0) {
+                SERVER_STATE.stock--;
+                SERVER_STATE.isLocked = false;
+                return { success: true, remaining: SERVER_STATE.stock, user: id };
+            }
+            SERVER_STATE.isLocked = false;
+            return { success: false, message: "RACE CONDITION PREVENTED" };
+        }
+        function confirmOrder() {
+    // 1. Hide the checkout modal
+    document.getElementById('phase-checkout').classList.add('hidden');
+    // 2. Show the success message
+    document.getElementById('phase-success').classList.remove('hidden');
+      }
 
-<h2>Midnight Classic Hoodie</h2>
+        async function attemptPurchase() {
+            const result = await atomicPurchaseGateway(SERVER_STATE.currentUser);
+            if(result.success) {
+                cart.push({ name: document.getElementById('drop-name').innerText, price: document.getElementById('drop-price').innerText });
+                document.getElementById('cart-count').innerText = cart.length;
+                
+                // UPDATED: Render the cart with the new Pay Now button
+                document.getElementById('cart-items').innerHTML = cart.map((i, index) => 
+                    `<div class="p-3 bg-slate-50 rounded-xl text-sm font-bold flex justify-between">
+                        <span>${i.name}</span><span>${i.price}</span>
+                    </div>`
+                ).join('') + 
+                `<button onclick="document.getElementById('phase-checkout').classList.remove('hidden')"class="w-full mt-4 bg-yellow-400 py-3 rounded-xl font-bold hover:bg-yellow-500 transition-all">
+                    PAY NOW
+                </button>`;
+                
+                toggleCart();
+            }
+            logTransaction(result.success ? "SUCCESS" : "FAIL", result.success ? `Claimed! Remaining: ${result.remaining}` : result.message);
+            updateDisplay();
+        }
 
-<p id="stock" class="stock">
-Loading stock...
-</p>
+        function simulateFlashSale() {
+            logTransaction("SYSTEM", "BOT ATTACK INITIATED...");
+            for(let i=0; i < 50; i++) {
+                setTimeout(async () => {
+                    const res = await atomicPurchaseGateway(`BOT_${i}`);
+                    if(res.success) logTransaction("FAIL", `Stock stolen by Bot #${i}`);
+                    else logTransaction("GATE", "Bot rejected by lock");
+                    updateDisplay();
+                }, Math.random() * 200);
+            }
+        }
 
-</div>
+        function logTransaction(type, msg) {
+            const log = document.getElementById('transaction-log');
+            const colors = { SUCCESS: "text-green-400", FAIL: "text-red-400", SYSTEM: "text-yellow-400", GATE: "text-slate-500" };
+            log.innerHTML = `<div class="${colors[type] || 'text-white'}">[${new Date().toLocaleTimeString()}] ${type}: ${msg}</div>` + log.innerHTML;
+        }
 
+        function updateDisplay() {
+            document.getElementById('main-stock-display').innerText = SERVER_STATE.stock;
+            if(SERVER_STATE.stock <= 0) {
+                const btn = document.getElementById('buy-btn');
+                btn.innerText = "OUT OF STOCK"; btn.disabled = true;
+                btn.className = "w-full bg-slate-200 text-slate-400 py-5 rounded-2xl font-bold text-lg cursor-not-allowed";
+            }
+        }
+    </script>
+    <div id="phase-checkout" class="hidden fixed inset-0 z-[300] bg-white p-8 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-20">
+            <h2 class="text-3xl font-black mb-8">Secure Checkout</h2>
+            <div class="space-y-4 mb-8">
+                <button onclick="confirmOrder()" class="w-full p-4 border-2 rounded-2xl font-bold hover:border-yellow-400 text-left transition-all">UPI / QR Code</button>
+                <button onclick="confirmOrder()" class="w-full p-4 border-2 rounded-2xl font-bold hover:border-yellow-400 text-left transition-all">Credit / Debit Card</button>
+                <button onclick="confirmOrder()" class="w-full p-4 border-2 rounded-2xl font-bold hover:border-yellow-400 text-left transition-all">Net Banking</button>
+            </div>
+            <button onclick="document.getElementById('phase-checkout').classList.add('hidden')" class="text-slate-400 font-bold">Cancel</button>
+        </div>
+    </div>
 
-<button id="buyBtn" class="buy-btn">
-Reserve Item
-</button>
-
-
-<div id="statusMessage" class="status">
-
-Waiting for drop...
-
-</div>
-
-</section>
-
-</div>
-
-<script src="script.js"></script>
-
+    <div id="phase-success" class="hidden fixed inset-0 z-[400] flex items-center justify-center bg-black/50 p-4">
+        <div class="bg-white p-10 rounded-[2rem] text-center max-w-sm w-full shadow-2xl">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-black mb-2">Order Placed!</h2>
+            <p class="text-slate-500 mb-6">Thanks for shopping with Solar.</p>
+            <button onclick="location.reload()" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-black transition-all">Back to Home</button>
+        </div>
+    </div>
+</body>
+</html>
 </body>
 </html>
