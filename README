@@ -1,0 +1,55 @@
+README.md
+Midnight Drop Backend
+A lightweight, high-performance flash sale reservation service built with Fastify. This backend handles inventory management and ensures users can only reserve a product once during a promotional drop.
+
+Features
+Atomic-ready reservation logic: In-memory tracking to handle quick requests.
+
+Duplicate Prevention: Prevents the same userId from making multiple reservations.
+
+CORS Enabled: Ready for integration with your frontend portal.
+
+Configurable: Easily adjust ports, product IDs, and stock levels via .env.
+
+Prerequisites
+ (v18 or higher recommended)
+
+npm or yarn
+
+Getting Started
+Clone the repository:
+
+Install dependencies:
+
+Configure Environment Variables:
+Create a .env file in the root directory:
+
+Run the server:
+
+API Documentation
+1. Get Current Stock
+Retrieves the current remaining inventory for the product.
+
+URL: /stock
+
+Method: GET
+
+Success Response: ```json
+{ "productId": "product_1", "stock": 10 }
+
+2. Reserve Product
+Attempts to reserve one unit of the product for a specific user.
+
+URL: /reserve
+
+Method: POST
+
+Body:
+
+Success Response (200):
+
+Error Responses:
+
+400: User ID required / Already purchased
+
+410: Sold out
