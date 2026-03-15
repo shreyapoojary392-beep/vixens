@@ -189,17 +189,16 @@
                 cart.push({ name: document.getElementById('drop-name').innerText, price: document.getElementById('drop-price').innerText });
                 document.getElementById('cart-count').innerText = cart.length;
                 
-                // UPDATED: Render the cart with the new Pay Now button
-                document.getElementById('cart-items').innerHTML = cart.map((i, index) => 
-                    `<div class="p-3 bg-slate-50 rounded-xl text-sm font-bold flex justify-between">
-                        <span>${i.name}</span><span>${i.price}</span>
-                    </div>`
-                ).join('') + 
-                `<button onclick="document.getElementById('phase-checkout').classList.remove('hidden')"class="w-full mt-4 bg-yellow-400 py-3 rounded-xl font-bold hover:bg-yellow-500 transition-all">
-                    PAY NOW
-                </button>`;
-                
-                toggleCart();
+                // Replace your existing cart-items assignment with this version
+document.getElementById('cart-items').innerHTML = cart.map((i, index) => 
+    `<div class="p-3 bg-slate-50 rounded-xl text-sm font-bold flex justify-between items-center">
+        <span>${i.name} (${i.price})</span>
+        <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+    </div>`
+).join('') + 
+`<button onclick="document.getElementById('phase-checkout').classList.remove('hidden')" class="w-full mt-4 bg-yellow-400 py-3 rounded-xl font-bold hover:bg-yellow-500 transition-all">
+    PROCEED TO PAY
+</button>`;
             }
             logTransaction(result.success ? "SUCCESS" : "FAIL", result.success ? `Claimed! Remaining: ${result.remaining}` : result.message);
             updateDisplay();
@@ -231,6 +230,31 @@
                 btn.className = "w-full bg-slate-200 text-slate-400 py-5 rounded-2xl font-bold text-lg cursor-not-allowed";
             }
         }
+        function removeItem(index) {
+    // 1. Remove the item from the array
+    cart.splice(index, 1);
+    
+    // 2. Update the cart count badge
+    document.getElementById('cart-count').innerText = cart.length;
+    
+    // 3. Re-run the cart rendering logic
+    // We need to re-render the cart items list after removal
+    const cartItemsDiv = document.getElementById('cart-items');
+    
+    if (cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p class='text-slate-400 text-center'>Your bag is empty.</p>";
+    } else {
+        cartItemsDiv.innerHTML = cart.map((i, idx) => 
+            `<div class="p-3 bg-slate-50 rounded-xl text-sm font-bold flex justify-between items-center">
+                <span>${i.name} (${i.price})</span>
+                <button onclick="removeItem(${idx})" class="text-red-500 hover:text-red-700">Remove</button>
+            </div>`
+        ).join('') + 
+        `<button onclick="document.getElementById('phase-checkout').classList.remove('hidden')" class="w-full mt-4 bg-yellow-400 py-3 rounded-xl font-bold hover:bg-yellow-500 transition-all">
+            PROCEED TO PAY
+        </button>`;
+    }
+}
     </script>
     <div id="phase-checkout" class="hidden fixed inset-0 z-[300] bg-white p-8 overflow-y-auto">
         <div class="max-w-xl mx-auto mt-20">
